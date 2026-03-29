@@ -2,13 +2,20 @@
 
 namespace MarceloEatWorld\RunPod;
 
+use Saloon\Http\Auth\TokenAuthenticator;
 use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
-use GuzzleHttp\RequestOptions;
+use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
+use Saloon\Traits\Plugins\HasTimeout;
 
 class RunPod extends Connector
 {
     use AcceptsJson;
+    use AlwaysThrowOnErrors;
+    use HasTimeout;
+
+    protected int $connectTimeout = 30;
+    protected int $requestTimeout = 300;
 
     public function __construct(public readonly string $apiKey) {}
 
@@ -17,21 +24,9 @@ class RunPod extends Connector
         return 'https://api.runpod.ai/v2/';
     }
 
-    protected function defaultHeaders(): array
+    protected function defaultAuth(): TokenAuthenticator
     {
-        return [
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $this->apiKey,
-        ];
-    }
-
-    protected function defaultConfig(): array
-    {
-        return [
-            RequestOptions::TIMEOUT => 300, // 5 minutes timeout
-            RequestOptions::CONNECT_TIMEOUT => 30, // 30 seconds connection timeout
-        ];
+        return new TokenAuthenticator($this->apiKey);
     }
 
     public function endpoint(string $endpointId): EndpointResource

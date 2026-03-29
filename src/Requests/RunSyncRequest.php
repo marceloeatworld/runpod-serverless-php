@@ -1,4 +1,5 @@
 <?php
+
 namespace MarceloEatWorld\RunPod\Requests;
 
 use Saloon\Contracts\Body\HasBody;
@@ -27,21 +28,20 @@ class RunSyncRequest extends Request implements HasBody
 
     protected function defaultBody(): array
     {
-
         $body = ['input' => $this->input];
-        
+
         if ($this->webhookUrl) {
             $body['webhook'] = $this->webhookUrl;
         }
-        
+
         if ($this->policy) {
             $body['policy'] = $this->policy;
         }
-        
+
         if ($this->s3Config) {
             $body['s3Config'] = $this->s3Config;
         }
-        
+
         return $body;
     }
 }

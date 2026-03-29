@@ -7,93 +7,87 @@ use Saloon\Http\Response;
 class RunPodResponse implements \JsonSerializable
 {
     public function __construct(
-        public ?string $id,
-        public ?string $status,
-        public array $data
+        public readonly ?string $id,
+        public readonly ?string $status,
+        public readonly array $data,
     ) {}
 
     public static function fromResponse(Response $response): self
     {
         $data = $response->json();
-        
+
         return new self(
             id: $data['id'] ?? null,
             status: $data['status'] ?? null,
-            data: $data // Garde toute la réponse brute
+            data: $data,
         );
     }
 
-    /**
-     * Statuts possibles selon la documentation RunPod
-     */
     public function isCompleted(): bool
     {
-        return strtoupper($this->status) === 'COMPLETED';
+        return strtoupper((string) $this->status) === 'COMPLETED';
     }
 
     public function isInQueue(): bool
     {
-        return strtoupper($this->status) === 'IN_QUEUE';
+        return strtoupper((string) $this->status) === 'IN_QUEUE';
     }
 
     public function isInProgress(): bool
     {
-        return strtoupper($this->status) === 'IN_PROGRESS';
+        return strtoupper((string) $this->status) === 'IN_PROGRESS';
     }
 
     public function isFailed(): bool
     {
-        return strtoupper($this->status) === 'FAILED';
+        return strtoupper((string) $this->status) === 'FAILED';
     }
 
     public function isCancelled(): bool
     {
-        return strtoupper($this->status) === 'CANCELLED';
+        return strtoupper((string) $this->status) === 'CANCELLED';
     }
 
-    /**
-     * Obtient la sortie si disponible
-     */
+    public function isTimedOut(): bool
+    {
+        return strtoupper((string) $this->status) === 'TIMED_OUT';
+    }
+
     public function getOutput(): mixed
     {
         return $this->data['output'] ?? null;
     }
 
-    /**
-     * Obtient les métriques d'exécution
-     */
+    public function getError(): mixed
+    {
+        return $this->data['error'] ?? null;
+    }
+
     public function getMetrics(): ?array
     {
         return $this->data['metrics'] ?? null;
     }
 
-    /**
-     * Obtient le temps d'exécution
-     */
     public function getExecutionTime(): ?int
     {
         return $this->data['executionTime'] ?? null;
     }
 
-    /**
-     * Obtient le temps de délai
-     */
     public function getDelayTime(): ?int
     {
         return $this->data['delayTime'] ?? null;
     }
 
-    /**
-     * Obtient l'erreur si présente
-     */
-    public function getError()
+    public function getWorkerId(): ?string
     {
-        return $this->data['error'] ?? null;
+        return $this->data['workerId'] ?? null;
     }
 
-    /**
-     * Pour la sérialisation JSON
-     */
+    public function getStream(): ?array
+    {
+        return $this->data['stream'] ?? null;
+    }
+
     public function jsonSerialize(): array
     {
         return $this->data;

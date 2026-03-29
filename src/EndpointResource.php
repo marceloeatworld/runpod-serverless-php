@@ -1,13 +1,15 @@
-<?php  
+<?php
+
 namespace MarceloEatWorld\RunPod;
 
 use MarceloEatWorld\RunPod\Data\RunPodResponse;
-use MarceloEatWorld\RunPod\Requests\RunRequest;
-use MarceloEatWorld\RunPod\Requests\RunSyncRequest;
-use MarceloEatWorld\RunPod\Requests\StatusRequest;
 use MarceloEatWorld\RunPod\Requests\CancelRequest;
 use MarceloEatWorld\RunPod\Requests\HealthRequest;
 use MarceloEatWorld\RunPod\Requests\PurgeQueueRequest;
+use MarceloEatWorld\RunPod\Requests\RetryRequest;
+use MarceloEatWorld\RunPod\Requests\RunRequest;
+use MarceloEatWorld\RunPod\Requests\RunSyncRequest;
+use MarceloEatWorld\RunPod\Requests\StatusRequest;
 use MarceloEatWorld\RunPod\Requests\StreamRequest;
 
 class EndpointResource extends Resource
@@ -20,6 +22,7 @@ class EndpointResource extends Resource
     {
         $request = new RunRequest($this->endpointId, $input, $this->webhookUrl, $this->policy, $this->s3Config);
         $response = $this->connector->send($request);
+
         return RunPodResponse::fromResponse($response);
     }
 
@@ -27,6 +30,7 @@ class EndpointResource extends Resource
     {
         $request = new RunSyncRequest($this->endpointId, $input, $this->webhookUrl, $this->policy, $this->s3Config);
         $response = $this->connector->send($request);
+
         return RunPodResponse::fromResponse($response);
     }
 
@@ -34,6 +38,7 @@ class EndpointResource extends Resource
     {
         $request = new StatusRequest($this->endpointId, $jobId);
         $response = $this->connector->send($request);
+
         return RunPodResponse::fromResponse($response);
     }
 
@@ -41,6 +46,15 @@ class EndpointResource extends Resource
     {
         $request = new CancelRequest($this->endpointId, $jobId);
         $response = $this->connector->send($request);
+
+        return RunPodResponse::fromResponse($response);
+    }
+
+    public function retry(string $jobId): RunPodResponse
+    {
+        $request = new RetryRequest($this->endpointId, $jobId);
+        $response = $this->connector->send($request);
+
         return RunPodResponse::fromResponse($response);
     }
 
@@ -48,6 +62,7 @@ class EndpointResource extends Resource
     {
         $request = new HealthRequest($this->endpointId);
         $response = $this->connector->send($request);
+
         return RunPodResponse::fromResponse($response);
     }
 
@@ -55,6 +70,7 @@ class EndpointResource extends Resource
     {
         $request = new PurgeQueueRequest($this->endpointId);
         $response = $this->connector->send($request);
+
         return RunPodResponse::fromResponse($response);
     }
 
@@ -62,24 +78,28 @@ class EndpointResource extends Resource
     {
         $request = new StreamRequest($this->endpointId, $jobId);
         $response = $this->connector->send($request);
+
         return RunPodResponse::fromResponse($response);
     }
 
     public function withWebhook(string $url): self
     {
         $this->webhookUrl = $url;
+
         return $this;
     }
 
     public function withPolicy(array $policy): self
     {
         $this->policy = $policy;
+
         return $this;
     }
 
     public function withS3Config(array $config): self
     {
         $this->s3Config = $config;
+
         return $this;
     }
 }
