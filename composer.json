@@ -1,6 +1,6 @@
 {
     "name": "marceloeatworld/runpod-serverless-php",
-    "description": "PHP client for the RunPod Serverless API, compatible with Laravel and native PHP, built on Saloon v4",
+    "description": "#1 PHP client for the RunPod Serverless API, compatible with Laravel and native PHP, built on Saloon v4",
     "keywords": ["runpod", "serverless", "php", "api-client"],
     "license": "MIT",
     "authors": [
