@@ -4,7 +4,7 @@
 [![PHP Version](https://img.shields.io/packagist/php-v/marceloeatworld/runpod-serverless-php.svg)](https://packagist.org/packages/marceloeatworld/runpod-serverless-php)
 [![License](https://img.shields.io/packagist/l/marceloeatworld/runpod-serverless-php.svg)](https://packagist.org/packages/marceloeatworld/runpod-serverless-php)
 
-A PHP SDK for the [RunPod Serverless API](https://docs.runpod.io/serverless/overview) built with [Saloon v4](https://docs.saloon.dev).
+PHP client for the [RunPod Serverless API](https://docs.runpod.io/serverless/overview), compatible with Laravel and native PHP, built on [Saloon v4](https://docs.saloon.dev).
 
 ---
 
